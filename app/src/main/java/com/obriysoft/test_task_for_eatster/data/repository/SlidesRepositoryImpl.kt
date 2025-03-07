@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.testtaskfore.data.network.ApiResult
 import com.example.testtaskfore.data.network.SlidesRemoteDataSource
 import com.obriysoft.test_task_for_eatster.data.local.database.SlidesLocalDataSource
-import com.obriysoft.test_task_for_eatster.data.model.mapper.fromNetworkToDatabaseModel
+import com.obriysoft.test_task_for_eatster.data.model.mapper.toDatabaseModel
 import com.obriysoft.test_task_for_eatster.domain.model.Slide
 import com.obriysoft.test_task_for_eatster.domain.model.mapper.toDomainModel
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +27,7 @@ class SlidesRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             when (val response = network.getSlides()) {
                 is ApiResult.Success -> {
-                    val slidesList = response.data.fromNetworkToDatabaseModel()
+                    val slidesList = response.data.toDatabaseModel()
                     database.insertSlides(slidesList)
                 }
                 // Normally error goes to UI

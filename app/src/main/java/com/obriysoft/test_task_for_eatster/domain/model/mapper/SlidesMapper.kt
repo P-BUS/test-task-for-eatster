@@ -7,7 +7,6 @@ fun List<SlideEntity>.toDomainModel(): List<Slide> {
     return this.map { data ->
         Slide(
             id = data.id,
-            orderPosition = data.position,
             onScreenDuration = data.duration,
             imageUrl = data.imageUrl
         )

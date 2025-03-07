@@ -1,6 +1,5 @@
 package com.example.testtaskfore.data.network
 
-import retrofit2.HttpException
 import retrofit2.Response
 
 suspend fun <T : Any> handleApiResponse(
@@ -14,7 +13,7 @@ suspend fun <T : Any> handleApiResponse(
         } else {
             ApiResult.Error(code = response.code(), message = response.message())
         }
-    } catch (exception: HttpException) {
-        ApiResult.Error(code = exception.code(), message = exception.message())
+    } catch (exception: Throwable) {
+        ApiResult.Error(code = exception.hashCode(), message = exception.message)
     }
 }

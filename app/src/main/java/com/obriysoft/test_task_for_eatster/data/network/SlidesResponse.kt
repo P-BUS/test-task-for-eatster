@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SlidesResponse(
     @SerialName("data")
-    val `data`: List<Data>
+    val data: List<Data>
 )
 
 @Serializable
@@ -14,7 +14,7 @@ data class Data(
     @SerialName("content_type")
     val contentType: Int,
     @SerialName("cta")
-    val cta: Int,
+    val cta: Int?,
     @SerialName("duration")
     val duration: Double,
     @SerialName("id")
