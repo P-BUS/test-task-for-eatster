@@ -1,4 +1,4 @@
-package com.obriysoft.test_task_for_eatster.ui.theme
+package com.obriysoft.test_task_for_eatster.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,4 +1,4 @@
-package com.obriysoft.test_task_for_eatster.ui.theme
+package com.obriysoft.test_task_for_eatster.presentation.theme
 
 import android.app.Activity
 import android.os.Build
