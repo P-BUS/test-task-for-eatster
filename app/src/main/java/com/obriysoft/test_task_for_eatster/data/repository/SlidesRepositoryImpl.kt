@@ -28,6 +28,7 @@ class SlidesRepositoryImpl @Inject constructor(
             when (val response = network.getSlides()) {
                 is ApiResult.Success -> {
                     val slidesList = response.data.toDatabaseModel()
+                    //database.deleteAllSlides()
                     database.insertSlides(slidesList)
                 }
                 // Normally error goes to UI
