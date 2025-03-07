@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SlidesDao {
-    @Query("SELECT * FROM images_database")
-    fun getAllSlides(): Flow<List<SlidesEntity>>
+    @Query("SELECT * FROM slides_database ORDER BY position ASC")
+    fun getSlidesStream(): Flow<List<SlideEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(image: SlidesEntity)
+    suspend fun insertSlides(slides: List<SlideEntity>)
 
-    @Query("DELETE FROM images_database")
-    suspend fun deleteAll()
+    @Query("DELETE FROM slides_database")
+    suspend fun deleteAllSlides()
 }

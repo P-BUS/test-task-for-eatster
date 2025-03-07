@@ -16,7 +16,5 @@ suspend fun <T : Any> handleApiResponse(
         }
     } catch (exception: HttpException) {
         ApiResult.Error(code = exception.code(), message = exception.message())
-    } catch (exception: Throwable) {
-        ApiResult.Exception(exception)
     }
 }
