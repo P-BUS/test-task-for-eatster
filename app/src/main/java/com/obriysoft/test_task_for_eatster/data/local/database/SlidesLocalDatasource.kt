@@ -9,6 +9,6 @@ class ImagesLocalDataSource @Inject constructor(
     fun getAllSlides(): Flow<List<SlidesEntity>> =
         database.getAllSlides()
 
-    suspend fun insertAll(fact: SlidesEntity) =
-        database.insertAll(fact)
+    suspend fun insertAll(slide: SlidesEntity) =
+        database.insertAll(slide)
 }
