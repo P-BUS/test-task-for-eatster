@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +32,8 @@ import coil3.request.crossfade
 import com.obriysoft.test_task_for_eatster.R
 import com.obriysoft.test_task_for_eatster.domain.model.Slide
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 @Composable
@@ -62,17 +65,21 @@ fun HomeScreenContent(
     val pagerState = rememberPagerState(pageCount = { slides.size })
 
     if (showPager && slides.isNotEmpty()) {
-        LaunchedEffect(pagerState.currentPage) {
-            launch {
-                delay(slides[pagerState.currentPage].onScreenDuration.toLong())
-                pagerState.animateScrollToPage(
-                    page = (pagerState.currentPage + 1) % slides.size,
-                    animationSpec = tween(
-                        durationMillis = 500,
-                        easing = FastOutSlowInEasing
-                    )
-                )
-            }
+        LaunchedEffect(pagerState) {
+            snapshotFlow { pagerState.settledPage }
+                .filter { !pagerState.isScrollInProgress }
+                .collectLatest { settledPage ->
+                    launch {
+                        delay(slides[settledPage].onScreenDuration.toLong())
+                        pagerState.animateScrollToPage(
+                            page = (settledPage + 1) % slides.size,
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = FastOutSlowInEasing
+                            )
+                        )
+                    }
+                }
         }
     }
 
