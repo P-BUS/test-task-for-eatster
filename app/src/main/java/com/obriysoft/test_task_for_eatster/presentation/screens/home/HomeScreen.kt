@@ -37,17 +37,15 @@ fun HomeScreen(
     homeViewModel: HomeViewModel
 ) {
     LaunchedEffect(Unit) {
-        homeViewModel.updateSlides()
-        homeViewModel.startIdleTimer()
+        homeViewModel.sendAction(HomeAction.OnScreenLoad)
     }
-    val slides by homeViewModel.slides.collectAsStateWithLifecycle()
-    val showPager by homeViewModel.showPager.collectAsStateWithLifecycle()
+    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
-    if (slides.isNotEmpty()) {
+    if (uiState.slides.isNotEmpty()) {
         HomeScreenContent(
-            slides = slides,
-            showPager = showPager,
-            onTap = homeViewModel::onTap,
+            slides = uiState.slides,
+            showPager = uiState.showPager,
+            onTap = { homeViewModel.sendAction(HomeAction.OnScreenTap) }
         )
     } else {
         LoadingScreen()
