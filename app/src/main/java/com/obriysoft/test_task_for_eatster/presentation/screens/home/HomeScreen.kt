@@ -112,7 +112,6 @@ fun ScreenSaver(
             state = pagerStateProvider(),
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Blue)
                 .clickable { onTap() }
         ) { page ->
             AsyncImage(
