@@ -35,6 +35,8 @@ class HomeViewModel @Inject constructor(
 
     fun onTap() {
         viewModelScope.launch {
+            updateShowPager(false)
+            startIdleTimer()
         }
     }
 
@@ -50,7 +52,7 @@ class HomeViewModel @Inject constructor(
     }
 
     companion object {
-        private const val IDLE_TIME = 20000L
+        private const val IDLE_TIME = 3000L // TODO: to change to 20000L
 
     }
 }
