@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// TODO: to create UI state class
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val slidesRepository: SlidesRepository
@@ -27,6 +28,8 @@ class HomeViewModel @Inject constructor(
     val _showPager: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showPager: StateFlow<Boolean> = _showPager.asStateFlow()
 
+    // TODO: to create state machine with events
+    // TODO: to make functions private after events are created
     fun updateSlides() {
         viewModelScope.launch {
             slidesRepository.updateSlidesDatabase()
@@ -52,7 +55,7 @@ class HomeViewModel @Inject constructor(
     }
 
     companion object {
-        private const val IDLE_TIME = 3000L // TODO: to change to 20000L
+        private const val IDLE_TIME = 3000L // TODO: to change back to 20000L
 
     }
 }
