@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -85,32 +86,47 @@ fun HomeScreenContent(
             text = "Hello Hello Hello",
             color = Color.White
         )
-        AnimatedVisibility(
-            visible = showPager,
-            enter = fadeIn(),
-            exit = fadeOut(),
-        ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color.Blue)
-                    .clickable { onTap() }
-            ) { page ->
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(slides[page].imageUrl)
-                        .crossfade(true)
-                        .build(),
-                    error = painterResource(R.drawable.ic_launcher_background),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+        ScreenSaver(
+            slides = slides,
+            showPager = showPager,
+            pagerStateProvider = { pagerState },
+            onTap = onTap
+        )
+    }
+}
+
+@Composable
+fun ScreenSaver(
+    modifier: Modifier = Modifier,
+    slides: List<Slide>,
+    showPager: Boolean,
+    pagerStateProvider: () -> PagerState,
+    onTap: () -> Unit
+) {
+    AnimatedVisibility(
+        visible = showPager,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        HorizontalPager(
+            state = pagerStateProvider(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Blue)
+                .clickable { onTap() }
+        ) { page ->
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(slides[page].imageUrl)
+                    .crossfade(true)
+                    .build(),
+                error = painterResource(R.drawable.ic_launcher_background),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
-
 }
 
 @Composable
