@@ -14,12 +14,14 @@ fun SlidesNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "slidesscreen"
+        startDestination = HOME_ROUTE
     ) {
-        composable("slidesscreen") {
+        composable(HOME_ROUTE) {
             HomeScreen(
                 homeViewModel = hiltViewModel<HomeViewModel>()
             )
         }
     }
 }
+
+private const val HOME_ROUTE = "slides_screen"

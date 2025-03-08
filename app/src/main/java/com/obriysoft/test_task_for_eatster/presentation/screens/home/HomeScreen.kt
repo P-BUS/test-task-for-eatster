@@ -34,7 +34,6 @@ import com.obriysoft.test_task_for_eatster.domain.model.Slide
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -69,16 +68,14 @@ fun HomeScreenContent(
             snapshotFlow { pagerState.settledPage }
                 .filter { !pagerState.isScrollInProgress }
                 .collectLatest { settledPage ->
-                    launch {
-                        delay(slides[settledPage].onScreenDuration.toLong())
-                        pagerState.animateScrollToPage(
-                            page = (settledPage + 1) % slides.size,
-                            animationSpec = tween(
-                                durationMillis = 500,
-                                easing = FastOutSlowInEasing
-                            )
+                    delay(slides[settledPage].onScreenDuration.toLong())
+                    pagerState.animateScrollToPage(
+                        page = (settledPage + 1) % slides.size,
+                        animationSpec = tween(
+                            durationMillis = 500,
+                            easing = FastOutSlowInEasing
                         )
-                    }
+                    )
                 }
         }
     }
@@ -94,6 +91,7 @@ fun HomeScreenContent(
             color = Color.White
         )
         ScreenSaver(
+            modifier = Modifier.fillMaxSize(),
             slides = slides,
             showPager = showPager,
             pagerStateProvider = { pagerState },
@@ -111,6 +109,7 @@ fun ScreenSaver(
     onTap: () -> Unit
 ) {
     AnimatedVisibility(
+        modifier = modifier,
         visible = showPager && slides.isNotEmpty(),
         enter = fadeIn(),
         exit = fadeOut(),

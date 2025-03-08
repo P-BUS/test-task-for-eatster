@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// TODO: to create UI state class
 data class UiState(
     val slides: List<Slide> = emptyList(),
     val showPager: Boolean = false,
@@ -81,6 +80,5 @@ class HomeViewModel @Inject constructor(
 
     companion object {
         private const val IDLE_TIME = 3000L // TODO: to change back to 20000L
-
     }
 }
