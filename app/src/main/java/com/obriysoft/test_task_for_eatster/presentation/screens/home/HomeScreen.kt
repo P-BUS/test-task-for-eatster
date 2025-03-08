@@ -104,7 +104,7 @@ fun ScreenSaver(
     onTap: () -> Unit
 ) {
     AnimatedVisibility(
-        visible = showPager,
+        visible = showPager && slides.isNotEmpty(),
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
