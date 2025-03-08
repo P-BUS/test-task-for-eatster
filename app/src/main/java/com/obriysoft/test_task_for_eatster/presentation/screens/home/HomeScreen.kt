@@ -1,6 +1,8 @@
 package com.obriysoft.test_task_for_eatster.presentation.screens.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -14,15 +16,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import com.obriysoft.test_task_for_eatster.R
 import com.obriysoft.test_task_for_eatster.domain.model.Slide
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -55,15 +60,18 @@ fun HomeScreenContent(
     showPager: Boolean,
     onTap: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { slides.size })
 
-    if (showPager) {
+    if (showPager && slides.isNotEmpty()) {
         LaunchedEffect(pagerState.currentPage) {
-            delay(slides[pagerState.currentPage].onScreenDuration.toLong())
-            scope.launch {
+            launch {
+                delay(slides[pagerState.currentPage].onScreenDuration.toLong())
                 pagerState.animateScrollToPage(
-                    (pagerState.currentPage + 1) % slides.size
+                    page = (pagerState.currentPage + 1) % slides.size,
+                    animationSpec = tween(
+                        durationMillis = 500,
+                        easing = FastOutSlowInEasing
+                    )
                 )
             }
         }
@@ -91,23 +99,20 @@ fun HomeScreenContent(
                     .background(color = Color.Blue)
                     .clickable { onTap() }
             ) { page ->
-                // TODO: to replace with Coil with cashing
-                Text(
-                    text = "Bla Bla Bla",
-                    color = Color.White
-                )
+                val url = slides[page].imageUrl
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(slides[page].imageUrl)
+                        .data(url)
                         .crossfade(true)
                         .build(),
+                    error = painterResource(R.drawable.ic_launcher_background),
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
             }
         }
     }
-
 
 }
 
