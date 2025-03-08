@@ -99,10 +99,9 @@ fun HomeScreenContent(
                     .background(color = Color.Blue)
                     .clickable { onTap() }
             ) { page ->
-                val url = slides[page].imageUrl
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(url)
+                        .data(slides[page].imageUrl)
                         .crossfade(true)
                         .build(),
                     error = painterResource(R.drawable.ic_launcher_background),
