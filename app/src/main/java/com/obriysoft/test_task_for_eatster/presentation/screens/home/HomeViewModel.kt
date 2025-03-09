@@ -45,6 +45,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun updateSlides() {
+        viewModelScope.launch {
+            slidesRepository.updateSlidesDatabase()
+        }
+    }
+
     private fun observeSlides() {
         viewModelScope.launch {
             slidesRepository.slidesStream
@@ -54,9 +60,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateSlides() {
+    private fun startIdleTimer(time: Long = IDLE_TIME) {
         viewModelScope.launch {
-            slidesRepository.updateSlidesDatabase()
+            delay(time)
+            updateShowPager(true)
         }
     }
 
@@ -64,13 +71,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             updateShowPager(false)
             startIdleTimer()
-        }
-    }
-
-    private fun startIdleTimer(time: Long = IDLE_TIME) {
-        viewModelScope.launch {
-            delay(time)
-            updateShowPager(true)
         }
     }
 

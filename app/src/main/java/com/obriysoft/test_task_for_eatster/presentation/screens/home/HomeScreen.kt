@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
@@ -44,15 +42,11 @@ fun HomeScreen(
     }
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
-    if (uiState.slides.isNotEmpty()) {
-        HomeScreenContent(
-            slides = uiState.slides,
-            showPager = uiState.showPager,
-            onTap = { homeViewModel.sendAction(HomeAction.OnScreenTap) }
-        )
-    } else {
-        LoadingScreen()
-    }
+    HomeScreenContent(
+        slides = uiState.slides,
+        showPager = uiState.showPager,
+        onTap = { homeViewModel.sendAction(HomeAction.OnScreenTap) }
+    )
 }
 
 @Composable
@@ -72,7 +66,7 @@ fun HomeScreenContent(
                     pagerState.animateScrollToPage(
                         page = (settledPage + 1) % slides.size,
                         animationSpec = tween(
-                            durationMillis = 500,
+                            durationMillis = 1000,
                             easing = FastOutSlowInEasing
                         )
                     )
@@ -91,7 +85,8 @@ fun HomeScreenContent(
             color = Color.White
         )
         ScreenSaver(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             slides = slides,
             showPager = showPager,
             pagerStateProvider = { pagerState },
@@ -111,8 +106,16 @@ fun ScreenSaver(
     AnimatedVisibility(
         modifier = modifier,
         visible = showPager && slides.isNotEmpty(),
-        enter = fadeIn(),
-        exit = fadeOut(),
+        enter = fadeIn(
+            animationSpec = tween(
+                durationMillis = 2000,
+            )
+        ),
+        exit = fadeOut(
+            animationSpec = tween(
+                durationMillis = 1000,
+            )
+        ),
     ) {
         HorizontalPager(
             state = pagerStateProvider(),
@@ -128,24 +131,9 @@ fun ScreenSaver(
                 error = painterResource(R.drawable.ic_launcher_background),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
             )
         }
-    }
-}
-
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Black),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(
-            modifier = modifier,
-            color = Color.White,
-            strokeWidth = 4.dp,
-        )
     }
 }
