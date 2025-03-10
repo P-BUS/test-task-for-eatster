@@ -79,6 +79,6 @@ class HomeViewModel @Inject constructor(
     }
 
     companion object {
-        private const val IDLE_TIME = 3000L // TODO: to change back to 20000L
+        private const val IDLE_TIME = 20000L
     }
 }
